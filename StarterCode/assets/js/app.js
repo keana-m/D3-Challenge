@@ -1,5 +1,5 @@
 // @TODO: YOUR CODE HERE!
-// D3.js challenge
+// Define svg attributes
 var svgWidth = 960;
 var svgHeight = 560;
 
@@ -13,7 +13,6 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
 var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
@@ -22,17 +21,17 @@ var svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// Import Data
+// data import
 d3.csv("assets/data/data.csv").then(function(risksData) {
 
-    // Step 1: Parse Data/Cast as numbers
+    // 1) parse the data
     // ==============================
     risksData.forEach(function(data) {
       data.poverty = +data.poverty;
       data.healthcare = +data.healthcare;
     });
 
-    // Step 2: Create scale functions
+    // 2) create x and y scale functions
     // ==============================
     var xLinearScale = d3.scaleLinear()
       .domain([8, d3.max(risksData, d => d.poverty+2)])
@@ -42,12 +41,12 @@ d3.csv("assets/data/data.csv").then(function(risksData) {
       .domain([4, d3.max(risksData, d => d.healthcare+2)])
       .range([height, 0]);
 
-    // Step 3: Create axis functions
+    // 3) create axis functions
     // ==============================
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
-    // Step 4: Append Axes to the chart
+    // 4) append x and y axes 
     // ==============================
     chartGroup.append("g")
       .attr("transform", `translate(0, ${height})`)
@@ -56,7 +55,7 @@ d3.csv("assets/data/data.csv").then(function(risksData) {
     chartGroup.append("g")
       .call(leftAxis);
 
-    // Step 5: Create Circles
+    // 5) create circles in chart
     // ==============================
     var circlesGroup = chartGroup.selectAll("circle")
     .data(risksData)
@@ -82,7 +81,7 @@ d3.csv("assets/data/data.csv").then(function(risksData) {
     .attr("fill", "white")
     .attr("font-weight", "700");
 
-    // Create axes labels
+    // create axes labels
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - margin.left + 10)
